@@ -1,0 +1,2 @@
+USERNAME = "FineBankbyJimeno"
+PASSWORD = "FineBankbyJimeno"
