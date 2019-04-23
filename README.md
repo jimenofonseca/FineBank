@@ -1,6 +1,6 @@
 # The FineBank
 
-A simple, yet powerful open source app to keep track of personal finances. 
+A simple, yet powerful open source app to keep track of personal finances. Made for family and friends and free to use.
 
 ## Features
 
