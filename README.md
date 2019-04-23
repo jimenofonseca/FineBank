@@ -13,6 +13,8 @@ It includes some cool features such as:
 5. Multi-currency (according to FOREX current exchange rate).
 6. Absolutely free.
 
+DICLAIMER: ALL DATA HAS BEEN RANDOMLY GENERATED AND IT IS PRESENTED FOR DEMONSTRATION PURPOSES.
+
 ### Parser of banking statments
 
 ### Overview Panel
