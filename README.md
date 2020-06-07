@@ -1,6 +1,7 @@
 # FineBank
+![GitHub license](https://img.shields.io/github/license/JIMENOFONSECA/DFineBank) ![Repo Size](https://img.shields.io/github/repo-size/JIMENOFONSECA/FineBank) ![Lines](https://raw.githubusercontent.com/JIMENOFONSECA/FineBank/image-data/badge-lines-of-code.svg)
 
-Application for managment of personal finances, FOREX real-time exchange rate, OCR bank statemtents.
+Application for management of personal finances, FOREX real-time exchange rate, OCR bank statemtents.
 
 ## Features
 
