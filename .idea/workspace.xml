@@ -2,7 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57ad7a99-b469-4c10-901d-425718154064" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/INPUTS/BANKING/DBS/Icon&#10;" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/INPUTS/BANKING/DBS/Icon&#10;" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/INPUTS/BANKING/Icon&#10;" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/INPUTS/BANKING/Icon&#10;" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/INPUTS/BANKING/POSTFINANCE/Icon&#10;" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/INPUTS/BANKING/POSTFINANCE/Icon&#10;" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/INPUTS/CATEGORIES.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/INPUTS/CATEGORIES.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/INPUTS/INVESTMENTS/Icon&#10;" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/INPUTS/INVESTMENTS/Icon&#10;" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/INPUTS/INVESTMENTS/TEMPLATE.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/INPUTS/INVESTMENTS/TEMPLATE.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/OUTPUTS/Icon&#10;" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/OUTPUTS/Icon&#10;" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/OUTPUTS/registry_banking.csv" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/OUTPUTS/registry_banking.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/OUTPUTS/registry_banking_metadata.csv" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/OUTPUTS/registry_banking_metadata.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/OUTPUTS/registry_investments.csv" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/OUTPUTS/registry_investments.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/example_data/example_data/OUTPUTS/registry_investments_metadata.csv" beforeDir="false" afterPath="$PROJECT_DIR$/assets/example_data/OUTPUTS/registry_investments_metadata.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/directories_pointer.py" beforeDir="false" afterPath="$PROJECT_DIR$/directories_pointer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,11 +68,11 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/requirements.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+            <state relative-caret-position="465">
+              <caret line="31" column="10" lean-forward="true" selection-start-line="31" selection-start-column="10" selection-end-line="31" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -88,22 +102,25 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/credentials.py">
+        <entry file="file://$PROJECT_DIR$/directories_pointer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="28" selection-start-column="12" selection-end-column="28" />
+            <state relative-caret-position="206">
+              <caret line="17" column="100" selection-start-line="17" selection-start-column="88" selection-end-line="17" selection-end-column="100" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/directories_pointer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="83" selection-start-line="7" selection-start-column="70" selection-end-line="7" selection-end-column="83" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="299">
+                <caret line="47" column="137" selection-start-line="47" selection-start-column="137" selection-end-line="47" selection-end-column="137" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -131,8 +148,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Finebank</find>
-      <find>'The FineBank App'</find>
       <find>finebank</find>
       <find>FinaBank</find>
       <find>FineBank</find>
@@ -158,9 +173,11 @@
       <find>menu_page</find>
       <find>button_investment</find>
       <find>options[0].value</find>
-      <find>app-1-show-category</find>
       <find>app-4-category-boolean</find>
       <find>category</find>
+      <find>app-1-show-category</find>
+      <find>example</find>
+      <find>example_data</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -173,8 +190,6 @@
         <option value="$PROJECT_DIR$/old_stuff/GUI/main_menu.py" />
         <option value="$PROJECT_DIR$/old_stuff/GUI/welcome.py" />
         <option value="$PROJECT_DIR$/credentials.py" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/directories_pointer.py" />
         <option value="$PROJECT_DIR$/colors.py" />
         <option value="$PROJECT_DIR$/graphs.py" />
         <option value="$PROJECT_DIR$/apps/index.py" />
@@ -193,13 +208,15 @@
         <option value="$PROJECT_DIR$/apps/net_worth_app.py" />
         <option value="$PROJECT_DIR$/apps/callbacks.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
+        <option value="$PROJECT_DIR$/directories_pointer.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="171" />
-    <option name="y" value="166" />
-    <option name="width" value="1340" />
+    <option name="x" value="49" />
+    <option name="y" value="23" />
+    <option name="width" value="1163" />
     <option name="height" value="797" />
   </component>
   <component name="ProjectView">
@@ -213,6 +230,11 @@
             <path>
               <item name="FineBank" type="b2602c69:ProjectViewProjectNode" />
               <item name="FineBank" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FineBank" type="b2602c69:ProjectViewProjectNode" />
+              <item name="FineBank" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -322,18 +344,18 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23679000" />
+    <option name="totallyTimeSpent" value="24388000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="47" y="26" width="1340" height="797" extended-state="0" />
+    <frame x="49" y="23" width="1340" height="797" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2650231" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.21560283" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.61843973" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.40425533" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3177305" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -455,16 +477,6 @@ x[1]</expression-string>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/old_stuff/GUI/welcome.py" />
     <entry file="file://$PROJECT_DIR$/old_stuff/login.sh" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="420">
-            <caret line="28" selection-start-line="28" selection-end-line="28" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/statement_parser/preprocessing_post.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3645">
@@ -634,16 +646,6 @@ x[1]</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/directories_pointer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="83" selection-start-line="7" selection-start-column="70" selection-end-line="7" selection-end-column="83" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/credentials.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -713,8 +715,28 @@ x[1]</expression-string>
     </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        <state relative-caret-position="465">
+          <caret line="31" column="10" lean-forward="true" selection-start-line="31" selection-start-column="10" selection-end-line="31" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/directories_pointer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="17" column="100" selection-start-line="17" selection-start-column="88" selection-end-line="17" selection-end-column="100" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="299">
+            <caret line="47" column="137" selection-start-line="47" selection-start-column="137" selection-end-line="47" selection-end-column="137" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>

@@ -15,12 +15,8 @@ def directories():
         print('directory found')
         dir_path = dir_path
     else:
-        dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "example_data", "example_data")
-        zip_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "example_data", "example_data.zip")
-        directory_to_extract_to = os.path.join(os.path.dirname(os.path.realpath(__file__)), "example_data")
-        zip_ref = zipfile.ZipFile(zip_path, 'r')
-        zip_ref.extractall(directory_to_extract_to)
-        zip_ref.close()
+        dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "example_data")
+
 
     # directory
     DIRECTORY_DBS = os.path.join(dir_path, "INPUTS", "BANKING", "DBS/")

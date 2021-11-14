@@ -45,7 +45,7 @@ It includes some cool features such as:
 
 ## do a quick test:
 
-1. Get the example_data included in this repository from [here](https://github.com/JIMENOFONSECA/FineBank/raw/master/example_data/example_data.zip)
+1. Get the example_data included in this repository from [here](https://github.com/JIMENOFONSECA/FineBank/raw/master/assets/example_data/)
 2. Open the FineBank App.
 3. Indicate the location of your database and the name of it. For the screenshots I used the example_database. It is a randomly generated database I included in this repository. 
 4. Provide the credentials for login: These are `USERNAME` add `PASSWORD` = TheFineBankAppbyJimeno
