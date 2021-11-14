@@ -1,18 +1,17 @@
-# FineBank
-![GitHub license](https://img.shields.io/github/license/JIMENOFONSECA/DFineBank) ![Repo Size](https://img.shields.io/github/repo-size/JIMENOFONSECA/FineBank) ![Lines](https://raw.githubusercontent.com/JIMENOFONSECA/FineBank/image-data/badge-lines-of-code.svg)
+# The FineBank
 
-Application for management of personal finances, FOREX real-time exchange rate, OCR bank statemtents.
+A simple, yet powerful open source app to keep track of personal finances. 
 
 ## Features
 
-1. OCR Parser of PDF statements for Banking Accounts in DBS (Singapore) and Postfinance (Switzerland).
-2. Categorization of transactions from typical retailers (i.e., Swisscom == Bills, Yoga == Health)
-3. Login interface (set password).
-4. Interactive charts Income, Expenses, Net worth, Investments and other assets (Bonds, Real Estate, retirement, deposits etc...)
-5. Multi-currency (according to FOREX real-time exchange rate).
-6. Absolutely free.
+It includes some cool features such as:
 
-DICLAIMER: ALL DATA HAS BEEN RANDOMLY GENERATED AND IT IS PRESENTED FOR DEMONSTRATION PURPOSES.
+1. Parser of PDF statements for Banking Accounts in DBS (Singapore) and Postfinance (Switzerland) to excel.
+2. Categorization of transactions from typical retailers (i.e., Swsscome == Bills, Yoga == Health)
+3. Login interface (set password for family members).
+4. Interactive charts Income, Expenses, Net worth, Investments and other assets (Bonds, Real Estate, retirement, deposits etc...)
+5. Multi-currency (according to FOREX current exchange rate).
+6. Absolutely free.
 
 ### Parser of banking statments
 
@@ -105,3 +104,5 @@ The next step is to open the app and process the data you have. Follow the next 
  - You can also turn off-on any label. The Charts are fully interactive
 
 ![Overview](https://github.com/JIMENOFONSECA/FineBank/raw/master/screenshots/Overview%20tab/overview.gif)
+
+MORE IN A FEW WEEKS TIME

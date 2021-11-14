@@ -25,6 +25,9 @@ def directories():
     # directory
     DIRECTORY_DBS = os.path.join(dir_path, "INPUTS", "BANKING", "DBS/")
     DIRECTORY_POSTFINANCE = os.path.join(dir_path, "INPUTS", "BANKING", "POSTFINANCE/")
+    DIRECTORY_CREDITSUISSE = os.path.join(dir_path, "INPUTS", "BANKING", "CS/")
+    DATA_MANUAL_INPUTS = os.path.join(dir_path, "INPUTS", "BANKING", "_MANUAL", "MANUAL.xlsx")
+
     DIRECTORY_INVESTMENTS = os.path.join(dir_path, "INPUTS", "INVESTMENTS/")
     DIRECTORY_PROCESSED = os.path.join(dir_path, "OUTPUTS")
 
@@ -38,6 +41,8 @@ def directories():
 
     directories = {"DIRECTORY_DBS": DIRECTORY_DBS,
                    "DIRECTORY_POSTFINANCE": DIRECTORY_POSTFINANCE,
+                   "DIRECTORY_CREDITSUISSE": DIRECTORY_CREDITSUISSE,
+                   "DATA_MANUAL_INPUTS": DATA_MANUAL_INPUTS,
                    "DIRECTORY_INVESTMENTS": DIRECTORY_INVESTMENTS,
                    "DIRECTORY_PROCESSED": DIRECTORY_PROCESSED,
                    "DATA_PROCESSED_INVESTMENTS": DATA_PROCESSED_INVESTMENTS,

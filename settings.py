@@ -77,6 +77,8 @@ def calc_years(directory):
 
 CURRENCIES = {'Singapur Dollar': 'SGD', 'Swiss Franc': 'CHF', 'Colombian Peso': 'COP', 'American Dollar': 'USD'}
 MONTH_ORDER = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+MONTH_ORDER_DBS_2021 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+MONTH_ORDER_DBS_2021_MAP = dict(zip(MONTH_ORDER_DBS_2021, MONTH_ORDER))
 
 
 def calc_type(account, ACCOUNT_TYPE):

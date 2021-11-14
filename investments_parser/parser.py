@@ -27,6 +27,7 @@ def conversion(x, to_currency):
     if value == "":
         return value
     else:
+        #print(year,rate, month,value, from_currency, to_currency)
         new_with = Decimal(str(round(rate, 4))) * Decimal(str(round(value, 4)))
         return new_with
 
@@ -89,9 +90,11 @@ def main():
             registry = registry.append(data_account, ignore_index=True, sort=False)
 
     # populate fields month and year
-    registry['DATE'] = pd.to_datetime(registry['DATE'], format='%d%b%Y:%H:%M:%S.%f')
+    s = pd.to_datetime(registry['DATE'], errors="coerce", format='%Y-%m-%d %H:%M:%S')
+    s = s.fillna(pd.to_datetime(registry['DATE'], format='%d/%m/%Y', errors='coerce'))
+    registry['DATE'] = s
     registry["MONTH"] = registry['DATE'].dt.month_name().str.slice(stop=3)  # add month to the database
-    registry["YEAR"] = registry['DATE'].dt.year  # add year to the database
+    registry['YEAR'] = registry['DATE'].dt.year  # add year to the database
 
     # compute the new fields per currency
     for currency in CURRENCIES.values():
@@ -108,7 +111,7 @@ def main():
                                        "TYPE": registry_type_per_account,
                                        "CURRENCY": registry_currency_per_account})
     registry_metadata.to_csv(DATA_PROCESSED_INVESTMENTS_METADATA)
-    print("succeed!")
+    print("success!")
 
 
 if __name__ == '__main__':

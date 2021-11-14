@@ -13,7 +13,7 @@ PAGES_BEGINNING = 0  # pages to skip at the beginning of the statment
 PAGES_END = 0  # pages to skip at the end of the statement
 
 conversion_numeric_month = {"01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "Jun", "07": "Jul",
-                            "08": "Aug", "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"}
+                            "08": "Aug", "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dez"}
 
 
 def Parser_function(filepath, CATEGORIES):
@@ -44,15 +44,16 @@ def Parser_function(filepath, CATEGORIES):
         # read pdf into dataframe
         # set where to check in  the statement
         if page + 1 == 1:  # the first page is always different
-            region = ['20,450,700,50']
+            region = ['20,600,700,50']
         else:
             region = ['20,750,700,50']
         page_table_format = camelot.read_pdf(filepath, pages=str(page + 1), flavor='stream',
-                                             table_areas=region)
+                                             table_areas=region,
+                                             columns=['90,300,400,450,500'])
         dataframe_table = page_table_format[0].df
 
         # indicate if total is in first column, this means there is an error and the region needs to change
-        index_where_total_is2 = dataframe_table.index[dataframe_table[0] == "Total"].tolist()
+        index_where_total_is2 = dataframe_table.index[dataframe_table[0] == "Umsatztotal / Schlusssaldo"] .tolist()
         if index_where_total_is2 != []:
             print("read 3 columns, 4 expected, correcting...")
             page_table_format = camelot.read_pdf(filepath, pages=str(page + 1), flavor='stream',
@@ -72,7 +73,7 @@ def Parser_function(filepath, CATEGORIES):
             raise Exception("error, the table does not have the right number of columns, page", str(page + 1))
 
         # indicate where the total is, to be used in the next loop
-        index_where_total_is = dataframe_table.index[dataframe_table[1] == "Total"].tolist()
+        index_where_total_is = dataframe_table.index[dataframe_table[1] == "Umsatztotal / Schlusssaldo"].tolist()
 
         # take out the last part
         if index_where_total_is != []:
@@ -83,7 +84,7 @@ def Parser_function(filepath, CATEGORIES):
         # select the number of column with witdrawal
         columns_number = dataframe_table.shape[1]
         for column_index in range(columns_number):
-            if "Lastschrift" in dataframe_table.loc[:, column_index].values:
+            if "Belastung" in dataframe_table.loc[:, column_index].values:
                 with_column_index = column_index
             if "Gutschrift" in dataframe_table.loc[:, column_index].values:
                 depo_column_index = column_index
@@ -113,7 +114,7 @@ def Parser_function(filepath, CATEGORIES):
         for row in range(len_dataframe):
             date = dataframe_table_raw.loc[row, date_column_index]
             text = dataframe_table_raw.loc[row, text_column_index]
-            if date != '' and date != "Valuta" and text.split()[0] != "ZINSABSCHLUSS":
+            if date != '' and date != "Valuta" and text.split()[0] != "Umsatztotal / Schlusssaldo":
                 length_date = len(date.split('.'))
                 if length_date > 1:
                     year_str = "20" + date.split('.')[2]
@@ -128,7 +129,7 @@ def Parser_function(filepath, CATEGORIES):
                         withdrawal_Decimal.append(Decimal(0.0))
                         withdrawal_boolean.append(False)
                     else:
-                        x = dataframe_table_raw.loc[row, balance_column_index].replace(" ", "")
+                        x = dataframe_table_raw.loc[row, balance_column_index].replace("'", "")
                         balance_Decimal.append(x)
                         withdrawal_Decimal.append(
                             Decimal(sub(r'[^\d.]', '', dataframe_table_raw.loc[row, with_column_index])))
@@ -137,7 +138,7 @@ def Parser_function(filepath, CATEGORIES):
                     if dataframe_table_raw.loc[row, depo_column_index] == '':
                         deposit_Decimal.append(Decimal(0.0))
                     else:
-                        x = dataframe_table_raw.loc[row, balance_column_index].replace(" ", "")
+                        x = dataframe_table_raw.loc[row, balance_column_index].replace("'", "")
                         balance_Decimal.append(x)
                         deposit_Decimal.append(
                             Decimal(sub(r'[^\d.]', '', dataframe_table_raw.loc[row, depo_column_index])))
@@ -151,11 +152,11 @@ def Parser_function(filepath, CATEGORIES):
                         if len(balance_Decimal) > 1:
                             balance_Decimal[-1] = balance_Decimal[-2]
                         else:
-                            balance_Decimal[-1] = dataframe_table_raw.loc[row - 1, balance_column_index].replace(" ",
+                            balance_Decimal[-1] = dataframe_table_raw.loc[row - 1, balance_column_index].replace("'",
                                                                                                                  "")
                             if balance_Decimal[-1] == '':
                                 balance_Decimal[-1] = dataframe_table_raw.loc[
-                                    row - 2, balance_column_index].replace(" ", "")
+                                    row - 2, balance_column_index].replace("'", "")
 
                     # descriptions
                     description_str.append(dataframe_table_raw.loc[row, text_column_index])
@@ -314,46 +315,19 @@ def Categorization(description_str, CATEGORIES):
 
 def Metadata(filepath):
     page_table_format = camelot.read_pdf(filepath, pages=str(1), flavor='stream',
-                                         table_areas=['20,600,700,50'])
+                                         table_areas=['20,800,700,50'],
+                                         columns=['90,300,400,500'])
     dataframe_table_raw = page_table_format[0].df
 
     # locate where is the name of the account
-    index_where_date = dataframe_table_raw.index[dataframe_table_raw[0] == "Privatkonto"].tolist()
-    if index_where_date == []:
-        index_where_date = dataframe_table_raw.index[dataframe_table_raw[0] == "E-Sparkonto"].tolist()
-    if index_where_date == []:
-        index_where_date = dataframe_table_raw.index[dataframe_table_raw[0] == "E- Sparkonto"].tolist()
-
-    index_where_date = index_where_date[0] + 1
-
-    date = dataframe_table_raw.loc[index_where_date, 0].split('-')[1]
-    month_str = conversion_numeric_month[date.split('.')[1]]
-    year_str = date.split('.')[-1]
+    index_where_date = 16
+    index_where_account = 3
+    date = dataframe_table_raw.loc[index_where_date, 2]
+    month_str = date.split('. ')[1].split(" ")[0][0:3]
+    year_str = date.split(' ')[-1]
     date_statement_str = date.split('.')[0] + " " + month_str + " " + year_str
-    if dataframe_table_raw.shape[1] == 5:
-        if "Kontonummer" in dataframe_table_raw.loc[index_where_date + 1, 2]:
-            account_str = dataframe_table_raw.loc[index_where_date + 1, 2].split(" ", 1)[1]
-        else:
-            account_str = dataframe_table_raw.loc[index_where_date + 2, 2].split(" ", 1)[1]
-    elif dataframe_table_raw.shape[1] == 6:
-        if "Kontonummer" in dataframe_table_raw.loc[index_where_date + 1, 3]:
-            account_str = dataframe_table_raw.loc[index_where_date + 1, 3].split(" ", 1)[1]
-        else:
-            account_str = dataframe_table_raw.loc[index_where_date + 2, 3].split(" ", 1)[1]
 
-    elif dataframe_table_raw.shape[1] == 7:
-        if "Kontonummer" in dataframe_table_raw.loc[index_where_date + 1, 4]:
-            account_str = dataframe_table_raw.loc[index_where_date + 1, 4].split(" ", 1)[1]
-        else:
-            account_str = dataframe_table_raw.loc[index_where_date + 2, 4].split(" ", 1)[1]
-
-    elif dataframe_table_raw.shape[1] == 3:
-        if "Kontonummer" in dataframe_table_raw.loc[index_where_date + 2, 1]:
-            account_str = dataframe_table_raw.loc[index_where_date + 2, 1].split(" ", 1)[1]
-        else:
-            account_str = dataframe_table_raw.loc[index_where_date + 2, 1].split(" ", 1)[1]
-    else:
-        print("error the frame shape was {}, valid are 5,6,7,3".format(dataframe_table_raw.shape[1]))
+    account_str = dataframe_table_raw.loc[index_where_account, 1].split(" ")[-1]
 
     return date_statement_str, month_str, year_str, account_str.replace(" ", "")
 
@@ -376,7 +350,7 @@ def getListOfFiles(dirName):
     return allFiles
 
 # Read pdf into DataFrame
-def POSTFINANCE_parser(DIRECTORY, directories):
+def CS_parser(DIRECTORY, directories):
     registry = pd.DataFrame()
     CATEGORIES, CATEGORIES_DEPOSIT, CATEGORIES_WITHDRAWAL = calc_categories(directories)
 
@@ -391,7 +365,7 @@ def POSTFINANCE_parser(DIRECTORY, directories):
         date_statement_str, month_str, year_str, account_str = Metadata(filepath)
         registry_accounts.append(account_str)
 
-        print("Working on statement Postfinance {} of the account No. {}".format(date_statement_str, account_str))
+        print("Working on statement CS {} of the account No. {}".format(date_statement_str, account_str))
         # Iterate over the pages of the statement
         statement_df= Parser_function(filepath, CATEGORIES)
 

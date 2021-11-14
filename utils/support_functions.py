@@ -19,6 +19,8 @@ def calculate_rate_exact_day_cop(to_currency):
         return 0.00031
     if to_currency == "USD":
         return 0.00031
+    if to_currency == "HKD":
+        return 0.0020
 
 def calculate_rate_exact_day_cop_inversed(from_currency):
     if from_currency == "SGD":
@@ -27,7 +29,8 @@ def calculate_rate_exact_day_cop_inversed(from_currency):
         return 1/0.00031
     if from_currency == "USD":
         return 1/0.00031
-
+    if from_currency == "HKD":
+        return 1/0.0020
 
 def calculate_rate_exact_day(from_currency, month, year, to_currency):
     year = str(year)
