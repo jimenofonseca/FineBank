@@ -1,96 +1,79 @@
+from dash import dcc
+from dash import html
+from dash.dependencies import Input, Output, State
+from application import application as app
+from apps.menu_page import layout as menu_page_layout
+from credentials import USERNAME, PASSWORD
+from apps import callbacks
+import os
 import json
 
-import dash_core_components as dcc
-import dash_html_components as html
-import pandas as pd
-from dash.dependencies import Input, Output
+#import data
+file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data_location.json")
+with open(file, 'r') as jsonFile:
+    data = json.load(jsonFile)
 
-from app import app, tab_style
-from apps import overview_app, cash_accounts_app, net_worth_app, investments_app
-from utils.support_functions import shutdown_server
+login_page = html.Div(children=[
 
-from directories_pointer import directories
-from settings import calc_type, calc_categories, calc_accounts, calc_years, get_options
-from colors import calculate_color
-
-directory = directories()
-CATEGORIES, CATEGORIES_DEPOSIT, CATEGORIES_WITHDRAWAL = calc_categories(directory)
-ACCOUNT_TYPE, ACCOUNTS_CURRENCY = calc_accounts(directory)
-YEARS_TO_PROCESS = calc_years(directory)
-COLOR = calculate_color(ACCOUNTS_CURRENCY)
-years_options, currencies_options, inv_accounts_options, cash_accounts_options, bond_accounts_options, rs_accounts_options, retirement_accounts_options = get_options(YEARS_TO_PROCESS, ACCOUNT_TYPE)
-
-def query_data():
-    directory = directories()
-    DATA_PROCESSED_INVESTMENTS = directory["DATA_PROCESSED_INVESTMENTS"]
-    DATA_PROCESSED = directory["DATA_PROCESSED_BANKING"]
-
-    # process data
-    data_processed_not_pivot = pd.read_csv(DATA_PROCESSED)
-    data_processed_investments = pd.read_csv(DATA_PROCESSED_INVESTMENTS)
-    data_processed_with_investment = pd.concat([data_processed_not_pivot, data_processed_investments],
-                                               ignore_index=True, sort=False)
-    data_processed_with_investment = data_processed_with_investment.fillna(0.0)
-
-    # convert date to timeindex
-    data_processed_with_investment['DATE'] = pd.to_datetime(data_processed_with_investment['DATE'])
-
-    ##TODO:calculate balance at the end of the month for each account
-    data_procesed_end_month_balance = pd.DataFrame()
-    for account in ACCOUNTS_CURRENCY.keys():
-        dat_balance = data_processed_with_investment[data_processed_with_investment["ACCOUNT"] == account]
-        x = dat_balance.groupby([dat_balance['DATE'].dt.year, dat_balance['DATE'].dt.month]).last()
-        data_procesed_end_month_balance = data_procesed_end_month_balance.append(x, ignore_index=True, sort=False)
-
-    datasets = {
-        'data_processed_with_investment': data_processed_with_investment.to_json(orient='split', date_format='iso'),
-        'data_procesed_end_month_balance': data_procesed_end_month_balance.to_json(orient='split',
-                                                                                   date_format='iso')}
-    return datasets
-
-
-# select content for the index
-header = html.Div([
+    # field
+    html.H1('The FineBank', style={'text-align': 'center'}),
+    html.H4('Please enter details below', style={'text-align': 'center'}),
+    html.Br(),
+    html.Label('Location and name of database', style={'text-align': 'center'}),
     html.Div([
-        html.Br(),
-        dcc.Link('OVERVIEW', href='/apps/overview_app', style=tab_style),
-        dcc.Link('CASH ACCOUNTS', href='/apps/cash_accounts_app', style=tab_style),
-        dcc.Link('INVESTMENTS', href='/apps/investments_app', style=tab_style),
-        dcc.Link('NET-WORTH', href='/apps/net_worth_app', style=tab_style),
-        dcc.Link('EXIT', href='/apps/exit', style=tab_style)],
+        dcc.Dropdown(id='login-database', options=[{'label': '/Documents', 'value': 'Documents'},
+                                                   {'label': '/Gogle Drive', 'value': 'Google Drive'},
+                                                   {'label': '/Downloads', 'value': 'Downloads'}],
+                     value=data["location1"])],
         style={'width': '50%', 'float': 'left', 'display': 'inline-block'}),
-    html.Br(),
-    html.Br(),
-    html.Br(),
-    html.Br(),
-])
 
-# select layout
-layout = html.Div([dcc.Location(id='url', refresh=False), html.Div(id='index_content')])
+    html.Div([
+        dcc.Input(id='login-database2', type='text', value=data["location2"])],
+        style={'width': '50%', 'float': 'right', 'display': 'inline-block'}),
+
+    html.Br(),
+    html.Br(),
+    html.Br(),
+    html.Label('Username', style={'text-align': 'center'}),
+    dcc.Input(id='username', placeholder="", type='text', value='', style={'width': '400px'}),
+    html.Br(),
+    html.Br(),
+    html.Label('Password', style={'text-align': 'center'}),
+    dcc.Input(id='password', placeholder="", type='password', value='', style={'width': '400px'}),
+    # login button
+    html.Br(),
+    html.Br(),
+    html.Button('Login', id='my-button', style={'width': '400px'}),
+    html.Br(),
+    html.Br(),
+    html.Label('(c) Jimeno Fonseca 2019', style={'text-align': 'center'})],
+    style={'width': '30%', 'float': 'center', 'display': 'inline-block'},
+    )
+
+server = app.server
+app.layout = html.Div(id="page",
+                      children=[login_page,
+                                html.Div(id="dummy"),
+                                html.Div(id="dummy2")])
 
 
-@app.callback(Output(component_id='index_content', component_property='children'),
-              [Input('url', 'pathname')])
-def display_page(pathname):
-    if pathname == '/apps/overview_app':
-        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
-                overview_app.layout]
-    elif pathname == '/apps/cash_accounts_app':
-        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
-                cash_accounts_app.layout]
-    elif pathname == '/apps/investments_app':
-        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
-                investments_app.layout]
-    elif pathname == '/apps/net_worth_app':
-        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
-                net_worth_app.layout]
-    elif pathname == '/apps/exit':
-        shutdown_server()
-        return html.H4("Good Bye!, you can close the browser now", style={'text-align': 'center'})
+@app.callback(Output(component_id='page', component_property='children'),
+              [Input(component_id='my-button', component_property='n_clicks')],
+              [State(component_id='username', component_property='value'),
+               State(component_id='password', component_property='value'),
+               State(component_id='login-database', component_property='value'),
+               State(component_id='login-database2', component_property='value')]
+              )
+def change_page(clicks, username, password, location1, location2):
+    if (username == USERNAME) and (password == PASSWORD)and clicks is not None:
+        data = {"location1": location1, "location2": location2}
+        file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data_location.json")
+        with open(file, "w") as jsonFile:
+            json.dump(data, jsonFile)
+        return menu_page_layout
     else:
-        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
-                overview_app.layout]
+        return login_page
 
 
 if __name__ == '__main__':
-    x = 1
+    app.run_server(debug=True)

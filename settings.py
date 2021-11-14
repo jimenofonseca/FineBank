@@ -34,7 +34,7 @@ def get_options(YEARS_TO_PROCESS, ACCOUNT_TYPE):
     return years_options, currencies_options, inv_accounts_options, cash_accounts_options, bond_accounts_options, rs_accounts_options, retirement_accounts_options
 
 def calc_categories(directory):
-    excel_file = pd.read_excel(directory["CATEGORIES_DATA"], "CATEGORIES")
+    excel_file = pd.read_excel(directory["CATEGORIES_DATA"], "CATEGORIES", engine="openpyxl")
     CATEGORIES_DEPOSIT = list(set(excel_file[excel_file["TYPE"] == "DEPOSIT"]["CATEGORY"]))
     CATEGORIES_WITHDRAWAL = list(set(excel_file[excel_file["TYPE"] == "WITHDRAWAL"]["CATEGORY"]))
 
