@@ -11,13 +11,6 @@ def directories():
     homedir = os.environ['HOME']
     dir_path = os.path.join(homedir, data["location1"], data["location2"])
 
-    if os.path.isdir(dir_path):
-        print('directory found')
-        dir_path = dir_path
-    else:
-        dir_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets", "example_data")
-
-
     # directory
     DIRECTORY_DBS = os.path.join(dir_path, "INPUTS", "BANKING", "DBS/")
     DIRECTORY_POSTFINANCE = os.path.join(dir_path, "INPUTS", "BANKING", "POSTFINANCE/")
