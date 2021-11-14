@@ -1,0 +1,9 @@
+dash
+pandas
+dash_core_components
+dash_html_components
+flask
+plotly
+django
+gunicorn
+django-heroku

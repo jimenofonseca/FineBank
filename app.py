@@ -1,32 +1,96 @@
-import dash
+import json
 
-# THIS ADDS SOME STYLE
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+import dash_core_components as dcc
+import dash_html_components as html
+import pandas as pd
+from dash.dependencies import Input, Output
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
-app.config.suppress_callback_exceptions = True
-app.scripts.config.serve_locally = True
-app.css.config.serve_locally = True
+from app import app, tab_style
+from apps import overview_app, cash_accounts_app, net_worth_app, investments_app
+from utils.support_functions import shutdown_server
 
-tab_style = {
-    'borderTop': '1px solid #d6d6d6',
-    'borderBottom': '1px solid #d6d6d6',
-    'borderLeft': '1px solid #d6d6d6',
-    'borderRight': '1px solid #d6d6d6',
-    'padding': '20px',
-    'height': '100px',
-    "text-decoration": "none"
-}
+from directories_pointer import directories
+from settings import calc_type, calc_categories, calc_accounts, calc_years, get_options
+from colors import calculate_color
 
-tab_selected_style = {
-    'borderTop': '1px solid #d6d6d6',
-    'borderBottom': '1px solid #d6d6d6',
-    'borderLeft': '1px solid #d6d6d6',
-    'borderRight': '1px solid #d6d6d6',
-    'backgroundColor': '#119DFF',
-    'color': 'white',
-    'padding': '20x',
-    'height': '100px',
-    "text-decoration": "none"
-}
+directory = directories()
+CATEGORIES, CATEGORIES_DEPOSIT, CATEGORIES_WITHDRAWAL = calc_categories(directory)
+ACCOUNT_TYPE, ACCOUNTS_CURRENCY = calc_accounts(directory)
+YEARS_TO_PROCESS = calc_years(directory)
+COLOR = calculate_color(ACCOUNTS_CURRENCY)
+years_options, currencies_options, inv_accounts_options, cash_accounts_options, bond_accounts_options, rs_accounts_options, retirement_accounts_options = get_options(YEARS_TO_PROCESS, ACCOUNT_TYPE)
+
+def query_data():
+    directory = directories()
+    DATA_PROCESSED_INVESTMENTS = directory["DATA_PROCESSED_INVESTMENTS"]
+    DATA_PROCESSED = directory["DATA_PROCESSED_BANKING"]
+
+    # process data
+    data_processed_not_pivot = pd.read_csv(DATA_PROCESSED)
+    data_processed_investments = pd.read_csv(DATA_PROCESSED_INVESTMENTS)
+    data_processed_with_investment = pd.concat([data_processed_not_pivot, data_processed_investments],
+                                               ignore_index=True, sort=False)
+    data_processed_with_investment = data_processed_with_investment.fillna(0.0)
+
+    # convert date to timeindex
+    data_processed_with_investment['DATE'] = pd.to_datetime(data_processed_with_investment['DATE'])
+
+    ##TODO:calculate balance at the end of the month for each account
+    data_procesed_end_month_balance = pd.DataFrame()
+    for account in ACCOUNTS_CURRENCY.keys():
+        dat_balance = data_processed_with_investment[data_processed_with_investment["ACCOUNT"] == account]
+        x = dat_balance.groupby([dat_balance['DATE'].dt.year, dat_balance['DATE'].dt.month]).last()
+        data_procesed_end_month_balance = data_procesed_end_month_balance.append(x, ignore_index=True, sort=False)
+
+    datasets = {
+        'data_processed_with_investment': data_processed_with_investment.to_json(orient='split', date_format='iso'),
+        'data_procesed_end_month_balance': data_procesed_end_month_balance.to_json(orient='split',
+                                                                                   date_format='iso')}
+    return datasets
+
+
+# select content for the index
+header = html.Div([
+    html.Div([
+        html.Br(),
+        dcc.Link('OVERVIEW', href='/apps/overview_app', style=tab_style),
+        dcc.Link('CASH ACCOUNTS', href='/apps/cash_accounts_app', style=tab_style),
+        dcc.Link('INVESTMENTS', href='/apps/investments_app', style=tab_style),
+        dcc.Link('NET-WORTH', href='/apps/net_worth_app', style=tab_style),
+        dcc.Link('EXIT', href='/apps/exit', style=tab_style)],
+        style={'width': '50%', 'float': 'left', 'display': 'inline-block'}),
+    html.Br(),
+    html.Br(),
+    html.Br(),
+    html.Br(),
+])
+
+# select layout
+layout = html.Div([dcc.Location(id='url', refresh=False), html.Div(id='index_content')])
+
+
+@app.callback(Output(component_id='index_content', component_property='children'),
+              [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/apps/overview_app':
+        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
+                overview_app.layout]
+    elif pathname == '/apps/cash_accounts_app':
+        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
+                cash_accounts_app.layout]
+    elif pathname == '/apps/investments_app':
+        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
+                investments_app.layout]
+    elif pathname == '/apps/net_worth_app':
+        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
+                net_worth_app.layout]
+    elif pathname == '/apps/exit':
+        shutdown_server()
+        return html.H4("Good Bye!, you can close the browser now", style={'text-align': 'center'})
+    else:
+        return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
+                overview_app.layout]
+
+
+if __name__ == '__main__':
+    x = 1
