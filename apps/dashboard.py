@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output
 
 from application import application as app
 from application import tab_style
-from apps import overview_app, cash_accounts_app, net_worth_app, investments_app, menu_page
+from apps import overview_app, balance_app, net_worth_app, investments_app, menu_page
 from utils.support_functions import shutdown_server
 
 from directories_pointer import directories
@@ -19,29 +19,45 @@ ACCOUNT_TYPE, ACCOUNTS_CURRENCY = calc_accounts(directory)
 def query_data():
     directory = directories()
     DATA_PROCESSED_INVESTMENTS = directory["DATA_PROCESSED_INVESTMENTS"]
-    DATA_PROCESSED = directory["DATA_PROCESSED_BANKING"]
+    DATA_PROCESSED_LIABILITIES = directory["DATA_PROCESSED_LIABILITIES"]
+    DATA_PROCESSED_BANKING = directory["DATA_PROCESSED_BANKING"]
 
     # process data
-    data_processed_not_pivot = pd.read_csv(DATA_PROCESSED)
+    data_processed_banking = pd.read_csv(DATA_PROCESSED_BANKING)
     data_processed_investments = pd.read_csv(DATA_PROCESSED_INVESTMENTS)
-    data_processed_with_investment = pd.concat([data_processed_not_pivot, data_processed_investments],
+    data_procesed_liabilities = pd.read_csv(DATA_PROCESSED_LIABILITIES)
+    data_processed_banking_with_investment = pd.concat([data_processed_banking, data_processed_investments],
                                                ignore_index=True, sort=False)
-    data_processed_with_investment = data_processed_with_investment.fillna(0.0)
+    data_processed_banking_with_investment = data_processed_banking_with_investment.fillna(0.0)
 
     # convert date to timeindex
-    data_processed_with_investment['DATE'] = pd.to_datetime(data_processed_with_investment['DATE'])
+    data_processed_banking['DATE'] = pd.to_datetime(data_processed_banking['DATE'])
+    data_processed_banking_with_investment['DATE'] = pd.to_datetime(data_processed_banking_with_investment['DATE'])
+    data_procesed_liabilities['DATE'] = pd.to_datetime(data_procesed_liabilities['DATE'])
 
     ##TODO:calculate balance at the end of the month for each account
-    data_procesed_end_month_balance = pd.DataFrame()
+    data_balance_banking_and_investment = pd.DataFrame()
     for account in ACCOUNTS_CURRENCY.keys():
-        dat_balance = data_processed_with_investment[data_processed_with_investment["ACCOUNT"] == account]
+        dat_balance = data_processed_banking_with_investment[data_processed_banking_with_investment["ACCOUNT"] == account]
         x = dat_balance.groupby([dat_balance['DATE'].dt.year, dat_balance['DATE'].dt.month]).last()
-        data_procesed_end_month_balance = data_procesed_end_month_balance.append(x, ignore_index=True, sort=False)
+        data_balance_banking_and_investment = data_balance_banking_and_investment.append(x, ignore_index=True, sort=False)
+
+    data_balance_liabilities = pd.DataFrame()
+    for account in ACCOUNTS_CURRENCY.keys():
+        dat_balance = data_procesed_liabilities[data_procesed_liabilities["ACCOUNT"] == account]
+        x = dat_balance.groupby([dat_balance['DATE'].dt.year, dat_balance['DATE'].dt.month]).last()
+        data_balance_liabilities = data_balance_liabilities.append(x, ignore_index=True, sort=False)
+
+    data_processed_banking_investment = pd.concat([data_processed_banking, data_processed_investments],ignore_index=True)
+    data_procesed_end_month_balance_with_liabilities = pd.concat([data_balance_banking_and_investment, data_procesed_liabilities],ignore_index=True)
 
     datasets = {
-        'data_processed_with_investment': data_processed_with_investment.to_json(orient='split', date_format='iso'),
-        'data_procesed_end_month_balance': data_procesed_end_month_balance.to_json(orient='split',
-                                                                                   date_format='iso')}
+        'data_banking': data_processed_banking.to_json(orient='split', date_format='iso'),
+        'data_banking_and_investment': data_processed_banking_investment.to_json(orient='split', date_format='iso'),
+        'data_balance_banking_and_investment': data_balance_banking_and_investment.to_json(orient='split', date_format='iso'),
+        'data_balance_liabilities': data_balance_liabilities.to_json(orient='split', date_format='iso'),
+        "data_balance_banking_investment_and_liabilities": data_procesed_end_month_balance_with_liabilities.to_json(orient='split', date_format='iso')
+    }
     return datasets
 
 
@@ -50,7 +66,7 @@ header = html.Div([
     html.Div([
         html.Br(),
         dcc.Link('OVERVIEW', href='/apps/overview_app', style=tab_style),
-        dcc.Link('CASH ACCOUNTS', href='/apps/cash_accounts_app', style=tab_style),
+        dcc.Link('BALANCE', href='/apps/balance_app', style=tab_style),
         dcc.Link('INVESTMENTS', href='/apps/investments_app', style=tab_style),
         dcc.Link('NET-WORTH', href='/apps/net_worth_app', style=tab_style),
         dcc.Link('EXIT', href='/apps/exit', style=tab_style)],
@@ -71,9 +87,9 @@ def display_page(pathname):
     if pathname == '/apps/overview_app':
         return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
                 overview_app.layout]
-    elif pathname == '/apps/cash_accounts_app':
+    elif pathname == '/apps/balance_app':
         return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
-                cash_accounts_app.layout]
+                balance_app.layout]
     elif pathname == '/apps/investments_app':
         return [header, html.Div([json.dumps(query_data())], id='DATABASE', style={'display': 'none'}),
                 investments_app.layout]

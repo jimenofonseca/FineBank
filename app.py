@@ -46,7 +46,7 @@ login_page = html.Div(children=[
     html.Button('Login', id='my-button', style={'width': '400px'}),
     html.Br(),
     html.Br(),
-    html.Label('(c) Jimeno Fonseca 2019', style={'text-align': 'center'})],
+    html.Label('(c) Jimeno Fonseca 2019-2022', style={'text-align': 'center'})],
     style={'width': '30%', 'float': 'center', 'display': 'inline-block'},
     )
 
@@ -65,7 +65,7 @@ app.layout = html.Div(id="page",
                State(component_id='login-database2', component_property='value')]
               )
 def change_page(clicks, username, password, location1, location2):
-    if (username == USERNAME) and (password == PASSWORD)and clicks is not None:
+    if (username == USERNAME) and (password == PASSWORD) and clicks is not None:
         data = {"location1": location1, "location2": location2}
         file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data_location.json")
         with open(file, "w") as jsonFile:

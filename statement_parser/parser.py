@@ -32,7 +32,7 @@ def conversion(x, to_currency):
     if value == "":
         return value
     else:
-        print(year,month,value, rate, from_currency, to_currency)
+        #print(year,month,value, rate, from_currency, to_currency)
         new_with = Decimal(str(round(rate, 4))) * Decimal(value)
         return new_with
 

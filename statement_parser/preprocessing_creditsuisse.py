@@ -69,7 +69,7 @@ def Parser_function(filepath, CATEGORIES):
             index_where_total_is2 = [1]
 
 
-        if len(dataframe_table.ix[0]) != 6:
+        if len(dataframe_table.iloc[0]) != 6:
             raise Exception("error, the table does not have the right number of columns, page", str(page + 1))
 
         # indicate where the total is, to be used in the next loop
@@ -186,8 +186,8 @@ def Parser_function(filepath, CATEGORIES):
         print("Warning, the total of deposits does not match")
 
     statement_df = pd.DataFrame({"DATE": date_str,
-                                 "DEBIT": withdrawal_Decimal,
-                                 "CREDIT": deposit_Decimal,
+                                 "CREDIT": withdrawal_Decimal,
+                                 "DEBIT": deposit_Decimal,
                                  "BALANCE": balance_Decimal,
                                  "YEAR": real_year,
                                  "MONTH": real_month,

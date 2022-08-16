@@ -48,8 +48,8 @@ layout = html.Div([
 
     # add barchat of expenses
     html.Div([html.H2('Net Worth'),
-              dcc.RadioItems(id='app-4-category-boolean', options=[{'label': 'Show values per category', 'value': "True"},
-                                                                   {'label': 'Show values per account', 'value': "False"}
+              dcc.RadioItems(id='app-4-category-boolean', options=[{'label': 'Show values per category', 'value': True},
+                                                                   {'label': 'Show values per account', 'value': False}
                                                                    ],
                              value=True, labelStyle={'display': 'inline-block', 'padding': '20'}),
 

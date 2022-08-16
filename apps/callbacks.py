@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from application import application as app
 from graphs import bar_chart_months, pie_chart, pie_chart_last_month
@@ -189,7 +190,7 @@ def app_3_update_spent_pie(year, accounts, currency, data):
 
 
 def app_3_update_expenses_pie(year, accounts, currency, data):
-    data_processed = get_database("data_processed_with_investment", data[0]).pivot_table(
+    data_processed = get_database("data_banking_and_investment", data[0]).pivot_table(
         index=["YEAR", "MONTH", "ACCOUNT"], columns="CAT",
         aggfunc=np.sum)
     data_frame = data_processed["DEBIT_" + currency]
@@ -203,7 +204,7 @@ def app_3_update_expenses_pie(year, accounts, currency, data):
 
 
 def app_3_update_income_pie(year, accounts, currency, data):
-    data_processed = get_database("data_processed_with_investment", data[0]).pivot_table(
+    data_processed = get_database("data_banking_and_investment", data[0]).pivot_table(
         index=["YEAR", "MONTH", "ACCOUNT"], columns="CAT",
         aggfunc=np.sum)
     data_frame = data_processed["CREDIT_" + currency]
@@ -351,7 +352,7 @@ def change_page_login(clicks_button3, clicks_button1, clicks_button2, clicks_but
         clicks_button3 = None
         return dashboard.layout
     else:
-        return [menu_page,
+        return [menu_page.menu_page,
                 html.Div(id="status_bar_menu"),
                 html.Div(id="status_bar_menu_button_parser_investments"),
                 html.Div(id="status_bar_menu_button_parser_cash")]
@@ -416,8 +417,12 @@ def update_graph_monthly_values(year, accounts, bonds, rfunds, cash, currency, c
     if category == "True":
         data_processed_2 = data_processed.loc[data_processed["ACCOUNT"].isin(accounts + bonds + rfunds + cash)]
         data_processed_2.loc[:, "TYPE"] = data_processed_2["ACCOUNT"].apply(lambda x: calc_type(x, ACCOUNT_TYPE))
+        #continue working here!!
+        data_processed_2 = data_processed_2.groupby([data_processed_2['DATE'].dt.year, data_processed_2['DATE'].dt.month, "ACCOUNT"], as_index=False).last()
         data_frame = data_processed_2.pivot_table(index=["YEAR", "MONTH", "ACCOUNT"], columns="TYPE",
                                                   values="BALANCE_" + currency, aggfunc=np.mean)
+
+
         data_frame = data_frame.fillna(0.0)
         data_frame = data_frame.loc[int(year), :, :]
         data = data_frame.copy().pivot_table(index=['MONTH'], aggfunc=np.sum)
@@ -491,12 +496,60 @@ def update_graph_income_pie(year, accounts, bonds, rfunds, cash, currency, categ
               [Input(component_id='app-1-show-category', component_property='value')]
               )
 def menu(category):
-    if category == "True":
+    if category == True:
         return [dcc.Dropdown(id='app-1-year', options=years_options,
                              value=YEARS_TO_PROCESS[-1], placeholder='Please select a year')]
     else:
         return [dcc.Dropdown(id='app-1-year', options=years_options,
                              value=YEARS_TO_PROCESS, multi=True, placeholder='Please select a year')]
+
+##### OVERWIE_APP
+
+@app.callback(Output(component_id='app-1-assets', component_property='figure'),
+              [Input(component_id='app-1-year', component_property='value'),
+               Input(component_id='app-1-currency', component_property='value'),
+               Input(component_id='app-1-show-category', component_property='value'),
+               Input(component_id='DATABASE', component_property='children')]
+              )
+def update_assets(year, currency, category, data):
+    data_procesed_end_month_balance = get_database("data_balance_banking_and_investment", data[0])
+    data_processed_2 = data_procesed_end_month_balance.copy()
+    data_processed_2["TYPE"] = data_processed_2["ACCOUNT"].apply(lambda x: calc_type(x, ACCOUNT_TYPE))
+    data_processed_2 = data_processed_2.groupby([data_processed_2['DATE'].dt.year, "ACCOUNT"], as_index=False).last()
+    data_frame = data_processed_2.pivot_table(index=["YEAR"], columns="TYPE",
+                                              values="BALANCE_" + currency, aggfunc=np.sum)
+    data_clean = data_frame.fillna(0.0)
+    analysis_fields = data_clean.columns.values
+    if category is False:
+        graph = bar_chart_months(data_clean, analysis_fields)
+    else:
+        data_pie = data_clean.loc[int(year)]
+        graph = pie_chart(data_pie, analysis_fields, currency)
+    return graph
+
+
+@app.callback(Output(component_id='app-1-liabilities', component_property='figure'),
+              [Input(component_id='app-1-year', component_property='value'),
+               Input(component_id='app-1-currency', component_property='value'),
+               Input(component_id='app-1-show-category', component_property='value'),
+               Input(component_id='DATABASE', component_property='children')]
+              )
+def update_graph_liabilities(year, currency, category, data):
+    data_procesed_liabilities = get_database("data_balance_liabilities", data[0])
+    data_processed_2 = data_procesed_liabilities.copy()
+    data_processed_2["TYPE"] = data_processed_2["ACCOUNT"].apply(lambda x: calc_type(x, ACCOUNT_TYPE))
+    data_processed_2 = data_processed_2.groupby([data_processed_2['DATE'].dt.year, "ACCOUNT"], as_index=False).last()
+    data_frame = data_processed_2.pivot_table(index=["YEAR"], columns="TYPE",
+                                              values="BALANCE_" + currency, aggfunc=np.sum)
+    data_clean = data_frame.fillna(0.0)
+    data_clean = data_clean.abs() #positive numbers from debt
+    analysis_fields = data_clean.columns.values
+    if category is False:
+        graph = bar_chart_months(data_clean, analysis_fields)
+    else:
+        data_pie = data_clean.loc[int(year)]
+        graph = pie_chart(data_pie, analysis_fields, currency)
+    return graph
 
 
 @app.callback(Output(component_id='app-1-net-worth', component_property='figure'),
@@ -505,91 +558,82 @@ def menu(category):
                Input(component_id='app-1-show-category', component_property='value'),
                Input(component_id='DATABASE', component_property='children')]
               )
-def update_net_worth(year, currency, category, data):
-    data_procesed_end_month_balance = get_database("data_procesed_end_month_balance", data[0])
-    if category== "True":
-        data_processed_2 = data_procesed_end_month_balance.copy()
-        data_processed_2["TYPE"] = data_processed_2["ACCOUNT"].apply(lambda x: calc_type(x, ACCOUNT_TYPE))
-        data_frame = data_processed_2.pivot_table(index=["YEAR", "MONTH", "ACCOUNT"], columns="TYPE",
-                                                  values="BALANCE_" + currency, aggfunc=np.mean)
-        data_frame = data_frame.fillna(0.0)
-        data_frame = data_frame.loc[int(year), :, :]
-        data = data_frame.copy().pivot_table(index=['MONTH'], aggfunc=np.sum)
-        analysis_fields = ACCOUNT_TYPE.keys()
-
-        # find the last month in the data displayed
-        for month in reversed(MONTH_ORDER):
-            if month in data.index:
-                last_month = month
-                break
-
-        graph = pie_chart_last_month(data, analysis_fields, currency, last_month, show_legend=True)
+def update_graph_net_worth(year, currency, category, data):
+    data_procesed_investement_and_liabilities = get_database("data_balance_banking_investment_and_liabilities", data[0])
+    data_processed_2 = data_procesed_investement_and_liabilities.copy()
+    data_processed_2["TYPE"] = data_processed_2["ACCOUNT"].apply(lambda x: calc_type(x, ACCOUNT_TYPE))
+    data_processed_2 = data_processed_2.groupby([data_processed_2['DATE'].dt.year, "ACCOUNT"], as_index=False).last()
+    data_frame = data_processed_2.pivot_table(index=["YEAR"], columns="TYPE",
+                                              values="BALANCE_" + currency, aggfunc=np.sum)
+    data_clean = pd.DataFrame(data_frame.fillna(0.0).sum(axis=1), columns=["NETWORTH"]) #positive numbers from debt
+    analysis_fields = data_clean.columns.values
+    if category is False:
+        graph = bar_chart_months(data_clean, analysis_fields)
     else:
-        years = [int(x) for x in year]
-        data_processed_3 = data_procesed_end_month_balance.copy()
-        data_processed_3["TYPE"] = data_processed_3["ACCOUNT"].apply(lambda x: calc_type(x, ACCOUNT_TYPE))
-        data_frame = data_processed_3.pivot_table(index=["YEAR", "MONTH", "ACCOUNT"], columns="TYPE",
-                                                  values="BALANCE_" + currency, aggfunc=np.mean)
-        data_frame = data_frame.fillna(0.0)
-        data_frame = data_frame.loc[years, "Dec", :]
-        data = data_frame.copy().pivot_table(index=['YEAR'], aggfunc=np.sum)
-
-        analysis_fields = ACCOUNT_TYPE.keys()
-
-        graph = bar_chart_months(data, analysis_fields)
-
+        data_pie = data_clean.loc[int(year)]
+        graph = pie_chart(data_pie, analysis_fields, currency)
     return graph
 
+##### BALANCE_APP
 
-@app.callback(Output(component_id='app-1-expenses-per-year', component_property='figure'),
+@app.callback(Output(component_id='app-1-income', component_property='figure'),
               [Input(component_id='app-1-year', component_property='value'),
                Input(component_id='app-1-currency', component_property='value'),
                Input(component_id='app-1-show-category', component_property='value'),
                Input(component_id='DATABASE', component_property='children')]
               )
-def update_graph_expenses_pie(year, currency, category, data):
-    data_processed_with_investment = get_database("data_processed_with_investment", data[0])
-    data_frame = data_processed_with_investment.pivot_table(index=["YEAR", "MONTH", "ACCOUNT"], columns="CAT",
-                                                                   aggfunc=np.sum)["DEBIT_" + currency]
-    if category == "True":
-        data_frame = data_frame.loc[int(year), :, :]
-        data_frame = data_frame.pivot_table(index=['MONTH'], aggfunc=np.sum)
-        data = data_frame.sum(axis=0)
-        analysis_fields_expenses = [x for x in CATEGORIES_WITHDRAWAL if x in data_frame.columns]
-        graph = pie_chart(data, analysis_fields_expenses, currency)
+def update(year, currency, category, data):
+    data_processed = get_database("data_banking_and_investment", data[0])
+    data_processed_2 = data_processed.copy()
+    data_frame = data_processed_2.pivot_table(index=["YEAR"], columns="CAT",
+                                              values="DEBIT_" + currency, aggfunc=np.sum)
+    data_clean = data_frame.fillna(0.0)
+    analysis_fields = [x for x in CATEGORIES_DEPOSIT if x in data_frame.columns]
+    if category is False:
+        graph = bar_chart_months(data_clean, analysis_fields)
     else:
-        years = [int(x) for x in year]
-        data_frame = data_frame.loc[years, :, :]
-        data_frame = data_frame.pivot_table(index=['YEAR'], aggfunc=np.sum)
-        analysis_fields_expenses = [x for x in CATEGORIES_WITHDRAWAL if x in data_frame.columns]
-
-        graph = bar_chart_months(data_frame, analysis_fields_expenses, legend_font=8)
-
+        data_pie = data_clean.loc[int(year)]
+        graph = pie_chart(data_pie, analysis_fields, currency)
     return graph
 
 
-@app.callback(Output(component_id='app-1-income-per-year', component_property='figure'),
+@app.callback(Output(component_id='app-1-expenses', component_property='figure'),
               [Input(component_id='app-1-year', component_property='value'),
                Input(component_id='app-1-currency', component_property='value'),
                Input(component_id='app-1-show-category', component_property='value'),
                Input(component_id='DATABASE', component_property='children')]
               )
-def update_graph_income_pie(year, currency, category, data):
-    data_processed_with_investment = get_database("data_processed_with_investment", data[0])
-    data_frame = data_processed_with_investment.copy().pivot_table(index=["YEAR", "MONTH", "ACCOUNT"], columns="CAT",
-                                                                   aggfunc=np.sum)["CREDIT_" + currency]
-    if category == "True":
-        data_frame = data_frame.loc[int(year), :, :]
-        data_frame = data_frame.pivot_table(index=['MONTH'], aggfunc=np.sum)
-        data = data_frame.sum(axis=0)
-        analysis_fields_income = [x for x in CATEGORIES_DEPOSIT if x in data_frame.columns]
-        graph = pie_chart(data, analysis_fields_income, currency)
+def update(year, currency, category, data):
+    data_processed = get_database("data_banking_and_investment", data[0])
+    data_processed_2 = data_processed.copy()
+    data_frame = data_processed_2.pivot_table(index=["YEAR"], columns="CAT",
+                                              values="CREDIT_" + currency, aggfunc=np.sum)
+    data_clean = data_frame.fillna(0.0)
+    analysis_fields = [x for x in CATEGORIES_WITHDRAWAL if x in data_frame.columns]
+    if category is False:
+        graph = bar_chart_months(data_clean, analysis_fields)
     else:
-        years = [int(x) for x in year]
-        data_frame = data_frame.loc[years, :, :]
-        data_frame = data_frame.pivot_table(index=['YEAR'], aggfunc=np.sum)
-        analysis_fields_expenses = [x for x in CATEGORIES_DEPOSIT if x in data_frame.columns]
+        data_pie = data_clean.loc[int(year)]
+        graph = pie_chart(data_pie, analysis_fields, currency)
+    return graph
 
-        graph = bar_chart_months(data_frame, analysis_fields_expenses)
 
+@app.callback(Output(component_id='app-1-balance', component_property='figure'),
+              [Input(component_id='app-1-year', component_property='value'),
+               Input(component_id='app-1-currency', component_property='value'),
+               Input(component_id='app-1-show-category', component_property='value'),
+               Input(component_id='DATABASE', component_property='children')]
+              )
+def update(year, currency, category, data):
+    data_processed = get_database("data_banking_and_investment", data[0])
+    data_processed_2 = data_processed.copy()
+    data_frame = data_processed_2.pivot_table(index=["YEAR"], columns="CAT",
+                                              values="CREDIT_" + currency, aggfunc=np.sum)
+    data_clean = data_frame.fillna(0.0)
+    analysis_fields = [x for x in CATEGORIES_DEPOSIT if x in data_frame.columns]
+    if category is False:
+        graph = bar_chart_months(data_clean, analysis_fields)
+    else:
+        data_pie = data_clean.loc[int(year)]
+        graph = pie_chart(data_pie, analysis_fields, currency)
     return graph

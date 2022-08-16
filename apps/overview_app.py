@@ -14,8 +14,8 @@ years_options, currencies_options, inv_accounts_options, cash_accounts_options, 
 layout = html.Div([
     html.Div([
         html.Label('Type'),
-        dcc.RadioItems(id='app-1-show-category', options=[{'label': 'Show year', 'value': "True"},
-                                                          {'label': 'Show year to year', 'value': "False"}],
+        dcc.RadioItems(id='app-1-show-category', options=[{'label': 'Show year', 'value': True},
+                                                          {'label': 'Show year to year', 'value': False}],
                        value=True),
         html.Br(),
         html.Label('Year'),
@@ -29,20 +29,25 @@ layout = html.Div([
                        value='CHF'),
         html.Br(),
     ],
-        style={'width': '15%', 'float': 'left', 'display': 'inline-block', 'paddingRight': '20px'}),
+        style={'width': '200px', 'float': 'left', 'display': 'inline-block', 'paddingRight': '20px'}),
 
-    # add piechart of balanc
-    html.Div([html.H2('Net-worth', style={'text-align': 'center'}),
-              dcc.Graph(id='app-1-net-worth')],
-             style={'width': '27%', 'display': 'inline-block', 'float': 'left', }),
-    # add piechart of expenses year
-    html.Div([html.H2('Expenses', style={'text-align': 'center'}),
-              dcc.Graph(id='app-1-expenses-per-year', style={'height': '73vh', })],
-             style={'width': '27%', 'height': '100vh', 'display': 'inline-block', 'float': 'center', }),
-    # add piechart of income
-    html.Div([html.H2('Income', style={'text-align': 'center'}),
-              dcc.Graph(id='app-1-income-per-year')],
-             style={'width': '27%', 'display': 'inline-block', 'float': 'right', }),
+              # add piechart of Assets
+    html.Div([
+        html.Div([html.H2('Assets', style={'text-align': 'center'}),
+                  dcc.Graph(id='app-1-assets')],
+                 style={'float': 'left', "margin-top": "10px",
+                        "margin-right": "20px"}
+                 ),
+        # add piechart of Liabilities
+        html.Div([html.H2('Liabilities', style={'text-align': 'center'}),
+                  dcc.Graph(id='app-1-liabilities')],
+                  style={'float': 'left', "margin-top": "10px",
+                         "margin-right": "20px"}),
+        # add piechart of net-worth'
+        html.Div([html.H2('Net-Worth', style={'text-align': 'center'}),
+                  dcc.Graph(id='app-1-net-worth')],
+                  style={'float': 'left', "margin-top": "10px"}),
 
-])
+        ], style={'vertical-align': 'top', 'display': 'inline-block', 'float': 'left'}),
+    ])
 

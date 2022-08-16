@@ -15,7 +15,7 @@ COLOR = calculate_color(ACCOUNTS_CURRENCY)
 
 
 def bar_chart_months(new_data_frame, analysis_fields, budget=0.0, show_budget_line=False, show_3_year_average=False,
-                     historical_data=None, show_total=False, investment=0.0, legend_font=12):
+                     historical_data=None, show_total=False, investment=0.0, legend_font=12, showlegend=True):
     # CALCULATE GRAPH
     graph = []
     # check analysis_fields
@@ -65,7 +65,7 @@ def bar_chart_months(new_data_frame, analysis_fields, budget=0.0, show_budget_li
                        xaxis=dict(categoryarray=MONTH_ORDER),
                        margin=dict(r=20, t=20, b=10, l=40),
                        hovermode='closest',
-                       showlegend=True
+                       showlegend=showlegend
                        )
 
     return {'data': graph, 'layout': layout}
@@ -108,17 +108,25 @@ def pie_chart(new_data_frame, analysis_fields, currency, percentage_flag=False, 
     else:
         central_text = format_currency(total, currency, locale='en_US')
     layout = go.Layout(showlegend=show_legend,
-                       legend=dict(orientation="h",
-                                   xanchor="center",
-                                   x=0.5),
-                       margin=dict(r=10, t=30, b=30, l=10),
+                       legend=dict(
+                           orientation="v",
+                           yanchor="bottom",
+                           y=-0.3,
+                           xanchor="left",
+                           x=0.1),
+                       margin=dict(r=0, t=0, b=0, l=0),
                        hovermode='closest',
                        annotations=[dict(text=central_text,
                                          showarrow=False,
                                          font=dict(
                                              size=20
-                                         ))])
-
+                                         ))],
+                       autosize=False,
+                       width=350,
+                       height=350,
+                       paper_bgcolor="rgba(0,0,0,0)",
+                       plot_bgcolor="rgba(0,0,0,0)"
+                       )
     return {'data': [trace], 'layout': layout}
 
 
@@ -151,14 +159,25 @@ def pie_chart_last_month(new_data_frame, analysis_fields, currency, last_month, 
 
     layout = go.Layout(showlegend=show_legend,
                        title=text_intermediate,
-                       legend=dict(orientation="h"),
-                       margin=dict(r=10, t=30, b=30, l=10),
+                       legend=dict(
+                           orientation="h",
+                           yanchor="bottom",
+                           y=-0.3,
+                           xanchor="left",
+                           x=0.1),
+                       margin=dict(r=0, t=0, b=0, l=0),
                        hovermode='closest',
                        annotations=[dict(text=central_text,
                                          showarrow=False,
                                          font=dict(
                                              size=20
-                                         ))])
+                                         ))],
+                       width=350,
+                       height=350,
+                       paper_bgcolor="rgba(0,0,0,0)",
+                       plot_bgcolor="rgba(0,0,0,0)"
+                       )
+
 
     return {'data': [trace], 'layout': layout}
 

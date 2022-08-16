@@ -48,7 +48,8 @@ def calc_categories(directory):
 def calc_accounts(directory):
     DATA_PROCESSED_INVESTMENTS_METADATA = pd.read_csv(directory["DATA_PROCESSED_INVESTMENTS_METADATA"])
     DATA_PROCESSED_BANKING_METADATA = pd.read_csv(directory["DATA_PROCESSED_BANKING_METADATA"])
-    meta_data_appended = DATA_PROCESSED_INVESTMENTS_METADATA.append(DATA_PROCESSED_BANKING_METADATA, ignore_index=True)
+    DATA_PROCESSED_LIABILITIES_METADATA = pd.read_csv(directory["DATA_PROCESSED_LIABILITIES_METADATA"])
+    meta_data_appended = pd.concat([DATA_PROCESSED_INVESTMENTS_METADATA, DATA_PROCESSED_BANKING_METADATA, DATA_PROCESSED_LIABILITIES_METADATA], ignore_index=True)
 
     types = list(set(meta_data_appended["TYPE"]))
     ACCOUNT_TYPE_dict = {}
@@ -67,7 +68,7 @@ def calc_accounts(directory):
 def calc_years(directory):
     DATA_PROCESSED_INVESTMENTS = pd.read_csv(directory["DATA_PROCESSED_INVESTMENTS"])
     DATA_PROCESSED_BANKING = pd.read_csv(directory["DATA_PROCESSED_BANKING"])
-    meta_data_appended = DATA_PROCESSED_INVESTMENTS.append(DATA_PROCESSED_BANKING, ignore_index=True, sort=False)
+    meta_data_appended = pd.concat([DATA_PROCESSED_INVESTMENTS,DATA_PROCESSED_BANKING], ignore_index=True, sort=False)
 
     years = list(set(meta_data_appended["YEAR"]))
     years.sort()

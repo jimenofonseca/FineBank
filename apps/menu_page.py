@@ -28,5 +28,5 @@ menu_page = html.Div(children=[
     style={'width': '30%', 'float': 'left', 'display': 'inline-block'})
 
 layout = html.Div(id="menu_page",
-                  children=[menu_page])
+                  children=menu_page)
 

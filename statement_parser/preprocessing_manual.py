@@ -73,7 +73,7 @@ def MANUAL_parser(file_path, directories):
         registry = registry.append(data_account, ignore_index=True, sort=False)
 
     # category assignment
-    withdrawal_boolean = [True if x > 0 and y <= 0 else False for x,y in zip(registry["DEBIT"].values, registry["CREDIT"].values)]
+    withdrawal_boolean = [True if x > 0 and y <= 0 else False for x,y in zip(registry["CREDIT"].values, registry["DEBIT"].values)]
     registry["CAT"], _, _, _ = get_category(registry["DESC_1"],
                                             registry["DESC_1"],
                                             registry["DESC_1"],

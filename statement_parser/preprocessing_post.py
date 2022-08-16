@@ -44,9 +44,9 @@ def Parser_function(filepath, CATEGORIES):
         # read pdf into dataframe
         # set where to check in  the statement
         if page + 1 == 1:  # the first page is always different
-            region = ['20,450,700,50']
+            region = ['25,450,700,50']
         else:
-            region = ['20,750,700,50']
+            region = ['25,750,700,50']
         page_table_format = camelot.read_pdf(filepath, pages=str(page + 1), flavor='stream',
                                              table_areas=region)
         dataframe_table = page_table_format[0].df
@@ -56,19 +56,19 @@ def Parser_function(filepath, CATEGORIES):
         if index_where_total_is2 != []:
             print("read 3 columns, 4 expected, correcting...")
             page_table_format = camelot.read_pdf(filepath, pages=str(page + 1), flavor='stream',
-                                                 table_areas=['20,750,700,50'])
+                                                 table_areas=['25,750,700,50'])
             dataframe_table = page_table_format[0].df
             index_where_total_is2 = [1]
 
         if index_where_total_is2 != []:
             print("read 3 columns, 4 expected, correcting...")
             page_table_format = camelot.read_pdf(filepath, pages=str(page + 1), flavor='stream',
-                                                 table_areas=['20,610,700,200'])
+                                                 table_areas=['25,610,700,200'])
             dataframe_table = page_table_format[0].df
             index_where_total_is2 = [1]
 
 
-        if len(dataframe_table.ix[0]) != 6:
+        if len(dataframe_table.iloc[0]) != 6:
             raise Exception("error, the table does not have the right number of columns, page", str(page + 1))
 
         # indicate where the total is, to be used in the next loop
@@ -185,8 +185,8 @@ def Parser_function(filepath, CATEGORIES):
         print("Warning, the total of deposits does not match")
 
     statement_df = pd.DataFrame({"DATE": date_str,
-                                 "DEBIT": withdrawal_Decimal,
-                                 "CREDIT": deposit_Decimal,
+                                 "CREDIT": withdrawal_Decimal,
+                                 "DEBIT": deposit_Decimal,
                                  "BALANCE": balance_Decimal,
                                  "YEAR": real_year,
                                  "MONTH": real_month,
@@ -314,7 +314,7 @@ def Categorization(description_str, CATEGORIES):
 
 def Metadata(filepath):
     page_table_format = camelot.read_pdf(filepath, pages=str(1), flavor='stream',
-                                         table_areas=['20,600,700,50'])
+                                         table_areas=['25,600,700,50'])
     dataframe_table_raw = page_table_format[0].df
 
     # locate where is the name of the account

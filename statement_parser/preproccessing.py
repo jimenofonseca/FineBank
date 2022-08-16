@@ -48,19 +48,24 @@ def Parser_function(filepath, year_str, CATEGORIES):
 
         # indicate if total is in first column, this means there is an error and the region needs to change
         index_where_total_is2 = dataframe_table.index[dataframe_table[0] == "Total"].tolist()
-        if index_where_total_is2 != []:
+        index_where_total_is3 = dataframe_table.index[dataframe_table[0] == "Total Balance Carried Forward in SGD:"].tolist()
+        if index_where_total_is2 != [] or index_where_total_is3 != []:
             print("read 3 columns, 4 expected, correcting...")
             page_table_format = camelot.read_pdf(filepath, pages=str(page + 1), flavor='stream',
                                                  table_areas=['20,640,700,200'])
             dataframe_table = page_table_format[0].df
-            index_where_total_is2 == [1]
+            index_where_total_is2 = dataframe_table.index[dataframe_table[0] == "Total"].tolist()
+            index_where_total_is3 = dataframe_table.index[dataframe_table[0] == "Total Balance Carried Forward in SGD:"].tolist()
 
-        if index_where_total_is2 != []:
+        if index_where_total_is2 != [] or index_where_total_is3 != []:
             print("read 3 columns, 4 expected, correcting...")
             page_table_format = camelot.read_pdf(filepath, pages=str(page + 1), flavor='stream',
                                                  table_areas=['20,610,700,200'])
             dataframe_table = page_table_format[0].df
-            index_where_total_is2 == [1]
+            index_where_total_is2 = dataframe_table.index[dataframe_table[0] == "Total"].tolist()
+            index_where_total_is3 = dataframe_table.index[dataframe_table[0] == "Total Balance Carried Forward in SGD:"].tolist()
+
+
 
 
 
@@ -152,19 +157,20 @@ def Parser_function(filepath, year_str, CATEGORIES):
                             Decimal(sub(r'[^\d.]', '', dataframe_table_raw.loc[row, depo_column_index])))
 
                     # accumulate balance if the last value was ''
-                    if balance_Decimal[-1] == '':
-                        if len(balance_Decimal) > 1:
-                            balance_Decimal[-1] = balance_Decimal[-2]
-                        else:
-                            balance_Decimal[-1] = dataframe_table_raw.loc[row - 1, balance_column_index].replace(
-                                ",", "")
-                            if balance_Decimal[-1] == '':
-                                balance_Decimal[-1] = dataframe_table_raw.loc[
-                                    row - 2, balance_column_index].replace(",", "")
+                    if balance_Decimal != []: #avovid problems ab June 2022 in DBS
+                        if balance_Decimal[-1] == '':
+                            if len(balance_Decimal) > 1:
+                                balance_Decimal[-1] = balance_Decimal[-2]
+                            else:
+                                balance_Decimal[-1] = dataframe_table_raw.loc[row - 1, balance_column_index].replace(
+                                    ",", "")
+                                if balance_Decimal[-1] == '':
+                                    balance_Decimal[-1] = dataframe_table_raw.loc[
+                                        row - 2, balance_column_index].replace(",", "")
 
                     if dataframe_table_raw.loc[row, depo_column_index] == '' and dataframe_table_raw.loc[
                         row, with_column_index] == '':
-                        balance_Decimal.append(Decimal(0.0))
+                        balance_Decimal.append(dataframe_table_raw.loc[row, balance_column_index].replace(",", ""))
 
                     # descriptions
                     description_str.append(dataframe_table_raw.loc[row, desc_column_index])
@@ -195,8 +201,8 @@ def Parser_function(filepath, year_str, CATEGORIES):
         print("Warning, the total of deposits does not match")
 
     statement_df = pd.DataFrame({"DATE": date_str,
-                                 "DEBIT": withdrawal_Decimal,
-                                 "CREDIT": deposit_Decimal,
+                                 "CREDIT": withdrawal_Decimal,
+                                 "DEBIT": deposit_Decimal,
                                  "BALANCE": balance_Decimal,
                                  "YEAR": real_year,
                                  "MONTH": real_month,
