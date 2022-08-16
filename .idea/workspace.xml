@@ -2,32 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57ad7a99-b469-4c10-901d-425718154064" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/balance_app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/layouts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/TESTS REGION OF PARSER.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Vermögen.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/FineBank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FineBank.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/callbacks.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/callbacks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/dashboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/menu_page.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/menu_page.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/net_worth_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/net_worth_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/overview_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/overview_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/colors.py" beforeDir="false" afterPath="$PROJECT_DIR$/colors.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_location.json" beforeDir="false" afterPath="$PROJECT_DIR$/data_location.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/directories_pointer.py" beforeDir="false" afterPath="$PROJECT_DIR$/directories_pointer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/investments_parser/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/investments_parser/parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/statement_parser/parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/statement_parser/parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/statement_parser/preproccessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/statement_parser/preproccessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/statement_parser/preprocessing_creditsuisse.py" beforeDir="false" afterPath="$PROJECT_DIR$/statement_parser/preprocessing_creditsuisse.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/statement_parser/preprocessing_manual.py" beforeDir="false" afterPath="$PROJECT_DIR$/statement_parser/preprocessing_manual.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/statement_parser/preprocessing_post.py" beforeDir="false" afterPath="$PROJECT_DIR$/statement_parser/preprocessing_post.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -331,7 +307,7 @@
       <workItem from="1652216939696" duration="237000" />
       <workItem from="1652297559691" duration="21532000" />
       <workItem from="1658944431406" duration="12298000" />
-      <workItem from="1660400192584" duration="3624000" />
+      <workItem from="1660400192584" duration="3964000" />
     </task>
     <servers />
   </component>
@@ -389,6 +365,9 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="requirements.txt" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -468,7 +447,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/FineBank$parser.coverage" NAME="parser Coverage Results" MODIFIED="1660672109396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/investments_parser" />
-    <SUITE FILE_PATH="coverage/FineBank$login.coverage" NAME="login Coverage Results" MODIFIED="1660672428339" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/FineBank$login.coverage" NAME="login Coverage Results" MODIFIED="1660672542707" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/FineBank$parser__1_.coverage" NAME="parser (1) Coverage Results" MODIFIED="1660672024467" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/statement_parser" />
   </component>
   <component name="debuggerHistoryManager">
