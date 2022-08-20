@@ -51,6 +51,15 @@ def query_data():
     data_processed_banking_investment = pd.concat([data_processed_banking, data_processed_investments],ignore_index=True)
     data_procesed_end_month_balance_with_liabilities = pd.concat([data_balance_banking_and_investment, data_procesed_liabilities],ignore_index=True)
 
+    #Take out dates in the past
+    from datetime import date
+    today = pd.to_datetime(date.today())
+    data_processed_banking = data_processed_banking.loc[pd.to_datetime(data_processed_banking["DATE"]) < today]
+    data_processed_banking_investment = data_processed_banking_investment.loc[pd.to_datetime(data_processed_banking_investment["DATE"]) < today]
+    data_balance_banking_and_investment = data_balance_banking_and_investment.loc[pd.to_datetime(data_balance_banking_and_investment["DATE"]) < today]
+    data_balance_liabilities = data_balance_liabilities.loc[pd.to_datetime(data_balance_liabilities["DATE"]) < today]
+    data_procesed_end_month_balance_with_liabilities = data_procesed_end_month_balance_with_liabilities.loc[pd.to_datetime(data_procesed_end_month_balance_with_liabilities["DATE"]) < today]
+
     datasets = {
         'data_banking': data_processed_banking.to_json(orient='split', date_format='iso'),
         'data_banking_and_investment': data_processed_banking_investment.to_json(orient='split', date_format='iso'),
